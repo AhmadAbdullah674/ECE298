@@ -1,0 +1,24 @@
+#include <msp430.h>
+#include <stdio.h>
+void main()
+{
+    WDTCTL = WDTPW + WDTHOLD; // Stop watchdog timer
+    P2SEL0 &= (~BIT1); // Set P2.1 SEL as GPIO
+    P2DIR &= (~BIT1); // Set P2.1 SEL as Input
+    P2IES |= (BIT1); // Falling Edge 1 -> 0
+    P2IFG &= (~BIT1); // Clear interrupt flag for P2.1
+    P2IE |= (BIT1); // Enable interrupt for P2.1
+    __enable_interrupt(); // Enable Global Interrupts
+    while(1)
+    {
+    }
+
+}
+
+// Port 1 interrupt service routine
+#pragma vector=PORT2_VECTOR
+__interrupt void Port_2(void)
+{
+    printf("Ahmad\n");
+    P1IFG &= (~BIT1); // P2.1 IFG clear
+}

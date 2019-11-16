@@ -1,0 +1,58 @@
+//***************************************************************************************
+//  MSP430 Blink the LED Demo - Software Toggle P1.0
+//
+//  Description; Toggle P1.0 by xor'ing P1.0 inside of a software loop.
+//  ACLK = n/a, MCLK = SMCLK = default DCO
+//
+//                MSP430x5xx
+//             -----------------
+//         /|\|              XIN|-
+//          | |                 |
+//          --|RST          XOUT|-
+//            |                 |
+//            |             P1.0|-->LED
+//
+//  Texas Instruments, Inc
+//  July 2013
+//***************************************************************************************
+
+#include <msp430.h>
+
+
+void enable()
+{
+    P2SEL0 &= (~BIT1); // Set P2.1 SEL as GPIO
+    P2DIR &= (~BIT1); // Set P2.1 SEL as Input
+    P2IES |= (BIT1); // Falling Edge 1 -> 0
+    P2IFG &= (~BIT1); // Clear interrupt flag for P2.1
+    P2IE |= (BIT1); // Enable interrupt for P2.1
+    __enable_interrupt(); // Enable Global Interrupts
+}
+void main(void) {
+
+
+    WDTCTL = WDTPW | WDTHOLD;               // Stop watchdog timer
+    PM5CTL0 &= ~LOCKLPM5;                   // Disable the GPIO power-on default high-impedance mode
+    //BIS.B   #1, P1IES;                                        // to activate previously configured port settings
+    P1DIR |= 0x01;                          // Set P1.0 to output direction
+    enable();
+    for(;;) {
+        volatile unsigned int i;            // volatile to prevent optimization
+
+        P1OUT ^= 0x01;                      // Toggle P1.0 using exclusive-OR
+
+        i = 10000;                          // SW Delay
+        do i--;
+        while(i != 0);
+
+
+    }
+}
+
+// Port 1 interrupt service routine
+#pragma vector=PORT2_VECTOR
+__interrupt void Port_2(void)
+{
+//printf("Ahmad\n");
+P1IFG &= (~BIT1); // P2.1 IFG clear
+}

@@ -1,0 +1,45 @@
+
+**** Build of configuration Debug for project ECE298_Project ****
+
+"C:\\Software\\ccs83\\ccsv8\\utils\\bin\\gmake" -k -j 4 all -O 
+ 
+Building file: "../main.c"
+Invoking: MSP430 Compiler
+"C:/Software/ccs83/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/bin/cl430" -vmspx --use_hw_mpy=none --include_path="C:/Software/ccs83/ccsv8/ccs_base/msp430/include" --include_path="N:/ECE-298/software/ECE298_Project" --include_path="C:/Software/ccs83/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/include" --advice:power=all --advice:hw_config=all --define=__MSP430FR4133__ -g --printf_support=minimal --diag_warning=225 --diag_wrap=off --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --preproc_with_compile --preproc_dependency="main.d_raw"  "../main.c"
+"../main.c", line 16: warning #179-D: variable "buttonState" was declared but never referenced
+"../main.c", line 58: remark #1527-D: (ULP 2.1) Detected SW delay loop using empty loop. Recommend using a timer module instead
+"../main.c", line 16: remark #1535-D: (ULP 8.1) variable "buttonState" is used as a constant. Recommend declaring variable as either 'static const' or 'const'
+"../main.c", line 185: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 186: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 187: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 188: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 189: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 190: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 191: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 192: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 212: remark #1538-D: (ULP 10.1) ISR EUSCIA0_ISR calls function EUSCI_A_UART_getInterruptStatus. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../main.c", line 214: remark #1538-D: (ULP 10.1) ISR EUSCIA0_ISR calls function EUSCI_A_UART_clearInterrupt. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../main.c", line 218: remark #1538-D: (ULP 10.1) ISR EUSCIA0_ISR calls function EUSCI_A_UART_transmitData. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../main.c", line 218: remark #1538-D: (ULP 10.1) ISR EUSCIA0_ISR calls function EUSCI_A_UART_receiveData. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../main.c", line 235: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 236: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 237: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 238: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 239: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 304: remark #1538-D: (ULP 10.1) ISR ADC_ISR calls function ADC_getInterruptStatus. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../main.c", line 306: remark #1538-D: (ULP 10.1) ISR ADC_ISR calls function ADC_clearInterrupt. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../main.c", line 311: remark #1538-D: (ULP 10.1) ISR ADC_ISR calls function ADC_getResults. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+Finished building: "../main.c"
+ 
+Building target: "ECE298_Project.out"
+Invoking: MSP430 Linker
+"C:/Software/ccs83/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/bin/cl430" -vmspx --use_hw_mpy=none --advice:power=all --advice:hw_config=all --define=__MSP430FR4133__ -g --printf_support=minimal --diag_warning=225 --diag_wrap=off --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 -z -m"ECE298_Project.map" --heap_size=160 --stack_size=160 --cinit_hold_wdt=on -i"C:/Software/ccs83/ccsv8/ccs_base/msp430/include" -i"C:/Software/ccs83/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/lib" -i"C:/Software/ccs83/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="ECE298_Project_linkInfo.xml" --use_hw_mpy=none --rom_model -o "ECE298_Project.out" "./hal_LCD.obj" "./main.obj" "./driverlib/adc.obj" "./driverlib/crc.obj" "./driverlib/cs.obj" "./driverlib/ecomp.obj" "./driverlib/eusci_a_spi.obj" "./driverlib/eusci_a_uart.obj" "./driverlib/eusci_b_i2c.obj" "./driverlib/eusci_b_spi.obj" "./driverlib/framctl.obj" "./driverlib/gpio.obj" "./driverlib/icc.obj" "./driverlib/lcd_e.obj" "./driverlib/mpy32.obj" "./driverlib/pmm.obj" "./driverlib/rtc.obj" "./driverlib/sac.obj" "./driverlib/sfr.obj" "./driverlib/sysctl.obj" "./driverlib/tia.obj" "./driverlib/timer_a.obj" "./driverlib/timer_b.obj" "./driverlib/tlv.obj" "./driverlib/wdt_a.obj" "../lnk_msp430fr4133.cmd"  -llibc.a 
+<Linking>
+remark #10372-D: (ULP 4.1) Detected uninitialized Port A in this project. Recommend initializing all unused ports to eliminate wasted current consumption on unused pins.
+remark #10372-D: (ULP 4.1) Detected uninitialized Port B in this project. Recommend initializing all unused ports to eliminate wasted current consumption on unused pins.
+remark #10372-D: (ULP 4.1) Detected uninitialized Port C in this project. Recommend initializing all unused ports to eliminate wasted current consumption on unused pins.
+remark #10372-D: (ULP 4.1) Detected uninitialized Port D in this project. Recommend initializing all unused ports to eliminate wasted current consumption on unused pins.
+Finished building target: "ECE298_Project.out"
+ 
+
+**** Build Finished ****

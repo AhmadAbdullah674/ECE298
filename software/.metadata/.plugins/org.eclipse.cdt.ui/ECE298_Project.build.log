@@ -1,0 +1,78 @@
+
+**** Build of configuration Debug for project ECE298_Project ****
+
+"C:\\ccsv8\\utils\\bin\\gmake" -k -j 4 all -O 
+ 
+Building file: "../main.c"
+Invoking: MSP430 Compiler
+"C:/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/bin/cl430" -vmspx --use_hw_mpy=none --include_path="C:/ccsv8/ccs_base/msp430/include" --include_path="C:/Users/Ahmad Abdullah/software/software/ECE298_Project" --include_path="C:/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/include" --advice:power=all --advice:hw_config=all --define=__MSP430FR4133__ -g --printf_support=minimal --diag_warning=225 --diag_wrap=off --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --preproc_with_compile --preproc_dependency="main.d_raw"  "../main.c"
+"../main.c", line 23: remark #1530-D: (ULP 5.1) Detected modulo operation(s). Recommend moving them to RAM during run time or not using as these are processing/power intensive
+"../main.c", line 24: remark #1530-D: (ULP 5.1) Detected modulo operation(s). Recommend moving them to RAM during run time or not using as these are processing/power intensive
+"../main.c", line 25: remark #1530-D: (ULP 5.1) Detected modulo operation(s). Recommend moving them to RAM during run time or not using as these are processing/power intensive
+"../main.c", line 26: remark #1530-D: (ULP 5.1) Detected modulo operation(s). Recommend moving them to RAM during run time or not using as these are processing/power intensive
+"../main.c", line 27: remark #1530-D: (ULP 5.1) Detected modulo operation(s). Recommend moving them to RAM during run time or not using as these are processing/power intensive
+"../main.c", line 30: remark #1530-D: (ULP 5.1) Detected modulo operation(s). Recommend moving them to RAM during run time or not using as these are processing/power intensive
+"../main.c", line 31: remark #1530-D: (ULP 5.1) Detected modulo operation(s). Recommend moving them to RAM during run time or not using as these are processing/power intensive
+"../main.c", line 32: remark #1530-D: (ULP 5.1) Detected modulo operation(s). Recommend moving them to RAM during run time or not using as these are processing/power intensive
+"../main.c", line 33: remark #1530-D: (ULP 5.1) Detected modulo operation(s). Recommend moving them to RAM during run time or not using as these are processing/power intensive
+"../main.c", line 34: remark #1530-D: (ULP 5.1) Detected modulo operation(s). Recommend moving them to RAM during run time or not using as these are processing/power intensive
+"../main.c", line 124: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 125: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 126: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 264: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 265: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 266: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 267: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 268: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 269: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 270: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 271: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 291: remark #1538-D: (ULP 10.1) ISR EUSCIA0_ISR calls function EUSCI_A_UART_getInterruptStatus. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../main.c", line 293: remark #1538-D: (ULP 10.1) ISR EUSCIA0_ISR calls function EUSCI_A_UART_clearInterrupt. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../main.c", line 297: remark #1538-D: (ULP 10.1) ISR EUSCIA0_ISR calls function EUSCI_A_UART_transmitData. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../main.c", line 297: remark #1538-D: (ULP 10.1) ISR EUSCIA0_ISR calls function EUSCI_A_UART_receiveData. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../main.c", line 314: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 315: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 316: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 317: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 318: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 326: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 327: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 328: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 329: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 330: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 331: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 340: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 341: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 342: remark #1546-D: (ULP 15.1) Detected consecutive bitfield assigns. Recommend using bit mask instead
+"../main.c", line 411: remark #1538-D: (ULP 10.1) ISR ADC_ISR calls function ADC_getInterruptStatus. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../main.c", line 413: remark #1538-D: (ULP 10.1) ISR ADC_ISR calls function ADC_clearInterrupt. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../main.c", line 418: remark #1538-D: (ULP 10.1) ISR ADC_ISR calls function ADC_getResults. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../main.c", line 426: remark #1538-D: (ULP 10.1) ISR PORT1_VECTOR_ISR calls function Timer_A_clear. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../main.c", line 438: remark #1538-D: (ULP 10.1) ISR PORT1_VECTOR_ISR calls function Timer_A_startCounter. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../main.c", line 440: remark #1527-D: (ULP 2.1) Detected SW delay loop using empty loop. Recommend using a timer module instead
+"../main.c", line 440: remark #1538-D: (ULP 10.1) ISR PORT1_VECTOR_ISR calls function GPIO_getInputPinValue. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../main.c", line 443: remark #1538-D: (ULP 10.1) ISR PORT1_VECTOR_ISR calls function Timer_A_stop. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../main.c", line 445: remark #1538-D: (ULP 10.1) ISR PORT1_VECTOR_ISR calls function Timer_A_getCounterValue. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../main.c", line 446: remark #1530-D: (ULP 5.1) Detected divide operation(s). Recommend moving them to RAM during run time or not using as these are processing/power intensive
+"../main.c", line 459: remark #1538-D: (ULP 10.1) ISR PORT1_VECTOR_ISR calls function GPIO_clearInterrupt. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../main.c", line 470: remark #1538-D: (ULP 10.1) ISR TIMER_A0_ISR calls function GPIO_setOutputHighOnPin. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../main.c", line 472: remark #1538-D: (ULP 10.1) ISR TIMER_A0_ISR calls function GPIO_setOutputLowOnPin. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../main.c", line 476: remark #1538-D: (ULP 10.1) ISR TIMER_A0_ISR calls function GPIO_setOutputHighOnPin. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../main.c", line 478: remark #1538-D: (ULP 10.1) ISR TIMER_A0_ISR calls function GPIO_setOutputLowOnPin. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../main.c", line 482: remark #1538-D: (ULP 10.1) ISR TIMER_A0_ISR calls function Timer_A_clearCaptureCompareInterrupt. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../main.c", line 19: remark #1535-D: (ULP 8.1) variable "sensor" is used as a constant. Recommend declaring variable as either 'static const' or 'const'
+Finished building: "../main.c"
+ 
+Building target: "ECE298_Project.out"
+Invoking: MSP430 Linker
+"C:/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/bin/cl430" -vmspx --use_hw_mpy=none --advice:power=all --advice:hw_config=all --define=__MSP430FR4133__ -g --printf_support=minimal --diag_warning=225 --diag_wrap=off --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 -z -m"ECE298_Project.map" --heap_size=160 --stack_size=160 --cinit_hold_wdt=on -i"C:/ccsv8/ccs_base/msp430/include" -i"C:/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/lib" -i"C:/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="ECE298_Project_linkInfo.xml" --use_hw_mpy=none --rom_model -o "ECE298_Project.out" "./hal_LCD.obj" "./main.obj" "./driverlib/adc.obj" "./driverlib/crc.obj" "./driverlib/cs.obj" "./driverlib/ecomp.obj" "./driverlib/eusci_a_spi.obj" "./driverlib/eusci_a_uart.obj" "./driverlib/eusci_b_i2c.obj" "./driverlib/eusci_b_spi.obj" "./driverlib/framctl.obj" "./driverlib/gpio.obj" "./driverlib/icc.obj" "./driverlib/lcd_e.obj" "./driverlib/mpy32.obj" "./driverlib/pmm.obj" "./driverlib/rtc.obj" "./driverlib/sac.obj" "./driverlib/sfr.obj" "./driverlib/sysctl.obj" "./driverlib/tia.obj" "./driverlib/timer_a.obj" "./driverlib/timer_b.obj" "./driverlib/tlv.obj" "./driverlib/wdt_a.obj" "../lnk_msp430fr4133.cmd"  -llibc.a 
+<Linking>
+remark #10372-D: (ULP 4.1) Detected uninitialized Port A in this project. Recommend initializing all unused ports to eliminate wasted current consumption on unused pins.
+remark #10372-D: (ULP 4.1) Detected uninitialized Port B in this project. Recommend initializing all unused ports to eliminate wasted current consumption on unused pins.
+remark #10372-D: (ULP 4.1) Detected uninitialized Port C in this project. Recommend initializing all unused ports to eliminate wasted current consumption on unused pins.
+remark #10372-D: (ULP 4.1) Detected uninitialized Port D in this project. Recommend initializing all unused ports to eliminate wasted current consumption on unused pins.
+Finished building target: "ECE298_Project.out"
+ 
+
+**** Build Finished ****
