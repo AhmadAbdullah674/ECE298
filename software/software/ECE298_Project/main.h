@@ -3,7 +3,7 @@
 
 #include "driverlib/driverlib.h"
 
-#define TIMER_A_PERIOD  15000 //T = 1/f = (TIMER_A_PERIOD * 1 us)
+#define TIMER_A_PERIOD  30000 //T = 1/f = (TIMER_A_PERIOD * 1 us)
 #define HIGH_COUNT      20  //Number of cycles signal is high (Duty Cycle = HIGH_COUNT / TIMER_A_PERIOD)
 #define COMPARE_VALUE   30000
 //Output pin to buzzer

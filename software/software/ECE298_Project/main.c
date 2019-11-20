@@ -20,18 +20,14 @@ STATE sensor = SENS1;
 
 void show2bytes(uint16_t num, uint16_t num2){
 
-    showChar((char)((num / 10000) % 10) + '0', pos1);
-    showChar((char)((num / 1000) % 10) + '0', pos2);
-    showChar((char)((num / 100) % 10) + '0', pos3);
-    showChar((char)((num / 10) % 10) + '0', pos4);
-    showChar((char)(num % 10) + '0', pos5);
-    __delay_cycles(100);
+    showChar((char)((num / 100) % 10) + '0', pos1);
+    showChar((char)((num / 10) % 10) + '0', pos2);
+    showChar((char)(num % 10) + '0', pos3);
 
-    showChar((char)((num2 / 10000) % 10) + '0', pos1);
-    showChar((char)((num2 / 1000) % 10) + '0', pos2);
-    showChar((char)((num2 / 100) % 10) + '0', pos3);
-    showChar((char)((num2 / 10) % 10) + '0', pos4);
-    showChar((char)(num2 % 10) + '0', pos5);
+    showChar((char)((num2 / 100) % 10) + '0', pos4);
+    showChar((char)((num2 / 10) % 10) + '0', pos5);
+    showChar((char)(num2 % 10) + '0', pos6);
+
 }
 void got(){
  GPIO_toggleOutputOnPin(GPIO_PORT_P1, GPIO_PIN4);
@@ -125,47 +121,20 @@ void Init_Timer(void){
     timer_param.clockSourceDivider = TIMER_A_CLOCKSOURCE_DIVIDER_1;
     timer_param.timerInterruptEnable_TAIE = TIMER_A_TAIE_INTERRUPT_DISABLE;
     timer_param.timerClear = TIMER_A_DO_CLEAR;
-    //startTimer = true;
+    timer_param.startTimer = false;
 
     Timer_A_initContinuousMode(TIMER_A1_BASE,&timer_param);
 
 }
-void Init_Interrupts(void)
+void Init_Sensor_Trigs(void)
 {
     GPIO_setAsInputPin(
             GPIO_PORT_P1,
-            GPIO_PIN6);
+            GPIO_PIN4);
 
-    GPIO_enableInterrupt(
-            GPIO_PORT_P1,
-            GPIO_PIN6);
-
-    GPIO_selectInterruptEdge(
-            GPIO_PORT_P1,
-            GPIO_PIN6,
-            GPIO_LOW_TO_HIGH_TRANSITION);
-
-////
     GPIO_setAsInputPin(
             GPIO_PORT_P1,
             GPIO_PIN3);
-
-    GPIO_enableInterrupt(
-            GPIO_PORT_P1,
-            GPIO_PIN3);
-
-    GPIO_selectInterruptEdge(
-            GPIO_PORT_P1,
-            GPIO_PIN3,
-            GPIO_LOW_TO_HIGH_TRANSITION);
-///
-    GPIO_clearInterrupt(
-            GPIO_PORT_P1,
-            GPIO_PIN_ALL8);
-
-    GPIO_clearInterrupt(
-            GPIO_PORT_P2,
-            GPIO_PIN_ALL8);
 }
 
 void Init_GPIO(void)
@@ -180,7 +149,7 @@ void Init_GPIO(void)
     GPIO_setOutputLowOnPin(GPIO_PORT_P7, GPIO_PIN0|GPIO_PIN1|GPIO_PIN2|GPIO_PIN3|GPIO_PIN4|GPIO_PIN5|GPIO_PIN6|GPIO_PIN7);
     GPIO_setOutputLowOnPin(GPIO_PORT_P8, GPIO_PIN0|GPIO_PIN1|GPIO_PIN2|GPIO_PIN3|GPIO_PIN4|GPIO_PIN5|GPIO_PIN6|GPIO_PIN7);
 
-    GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN0|GPIO_PIN1|GPIO_PIN3|GPIO_PIN5|GPIO_PIN4|GPIO_PIN7);
+    GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN0|GPIO_PIN1|GPIO_PIN5|GPIO_PIN7|GPIO_PIN2);
     GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN0|GPIO_PIN1|GPIO_PIN2|GPIO_PIN3|GPIO_PIN4|GPIO_PIN5|GPIO_PIN7);
     GPIO_setAsOutputPin(GPIO_PORT_P3, GPIO_PIN0|GPIO_PIN1|GPIO_PIN2|GPIO_PIN3|GPIO_PIN4|GPIO_PIN5|GPIO_PIN6|GPIO_PIN7);
     GPIO_setAsOutputPin(GPIO_PORT_P4, GPIO_PIN0|GPIO_PIN1|GPIO_PIN2|GPIO_PIN3|GPIO_PIN4|GPIO_PIN5|GPIO_PIN6|GPIO_PIN7);
@@ -420,49 +389,6 @@ void ADC_ISR(void)
     }
 }
 
-#pragma vector=PORT1_VECTOR
-__interrupt
-void PORT1_VECTOR_ISR(void){
-
-    Timer_A_clear(TIMER_A1_BASE);
-
-    //GPIO_toggleOutputOnPin(GPIO_PORT_P1, GPIO_PIN4);
-    uint16_t pin;
-
-    if(sensor == SENS1){
-        pin = GPIO_PIN6;
-    }
-    else{
-        pin = GPIO_PIN3;
-    }
-
-    Timer_A_startCounter(TIMER_A1_BASE,TIMER_A_CONTINUOUS_MODE);
-
-    while(GPIO_getInputPinValue(GPIO_PORT_P1,pin) == GPIO_INPUT_PIN_HIGH){
-    }
-
-    Timer_A_stop(TIMER_A1_BASE);
-
-    pin = Timer_A_getCounterValue(TIMER_A1_BASE);
-    pin = pin / 58;
-
-    if(sensor == SENS1){
-        time = pin;
-        pin = GPIO_PIN6;
-    }
-    else{
-        time2 = pin;
-        pin = GPIO_PIN3;
-    }
-
-    //GPIO_toggleOutputOnPin(GPIO_PORT_P1, GPIO_PIN4);
-
-    GPIO_clearInterrupt(
-            GPIO_PORT_P1,
-            pin);
-
-    /*Will add logic for multi-interrupt handling later*/
-}
 #pragma vector=TIMER0_A0_VECTOR
 __interrupt
 void TIMER_A0_ISR(void){
@@ -471,15 +397,17 @@ void TIMER_A0_ISR(void){
        GPIO_setOutputHighOnPin(GPIO_PORT_P1,GPIO_PIN7);
        __delay_cycles(10);
        GPIO_setOutputLowOnPin(GPIO_PORT_P1,GPIO_PIN7);
-        __delay_cycles(10);
+//        //__delay_cycles(5);
+        sensor  = SENS2;
     }
     else{
         GPIO_setOutputHighOnPin(GPIO_PORT_P2,GPIO_PIN7);
         __delay_cycles(10);
         GPIO_setOutputLowOnPin(GPIO_PORT_P2,GPIO_PIN7);
-         __delay_cycles(10);
+         //__delay_cycles(5);
+         sensor = SENS1;
     }
-    //sensor = !sensor;
+
     Timer_A_clearCaptureCompareInterrupt(TIMER_A0_BASE,
         TIMER_A_CAPTURECOMPARE_REGISTER_0
         );
@@ -512,7 +440,7 @@ void main(void)
     Init_UART();    //Sets up an echo over a COM port
     Init_LCD();     //Sets up the LaunchPad LCD display
     Init_Timer();
-    Init_Interrupts();
+    Init_Sensor_Trigs();
 
      /*
      * The MSP430 MCUs have a variety of low power modes. They can be almost
@@ -522,16 +450,48 @@ void main(void)
      * user guide, or see "pmm.h" in the driverlib directory. Unless you
      * purposefully want to play with the power modes, just leave this command in.
      */
+    //GPIO_setOutputLowOnPin(GPIO_PORT_P1,GPIO_PIN6);
     PMM_unlockLPM5(); //Disable the GPIO power-on default high-impedance mode to activate previously configured port settings
     //All done initializations - turn interrupts back on.
     Init_Timer_Trig();
+
     displayScrollText("ECE 298");
     //got();
     __enable_interrupt();
-
-    //Timer_A_outputPWM(TIMER_A0_BASE, &param);
     start_timer();
     while(1){
+		
+	if(sensor == SENS1){
+	    Timer_A_clear(TIMER_A1_BASE);
+		while (GPIO_getInputPinValue(GPIO_PORT_P1,GPIO_PIN3) == 0){};
+
+		Timer_A_startCounter(TIMER_A1_BASE,TIMER_A_CONTINUOUS_MODE);
+
+		while(GPIO_getInputPinValue(GPIO_PORT_P1,GPIO_PIN3) == GPIO_INPUT_PIN_HIGH){
+		}
+
+		Timer_A_stop(TIMER_A1_BASE);
+
+		time = Timer_A_getCounterValue(TIMER_A1_BASE);
+		time = time / 58;
+	}
+	else{
+	    Timer_A_clear(TIMER_A1_BASE);
+		while (GPIO_getInputPinValue(GPIO_PORT_P1,GPIO_PIN4) == 0){};
+
+		Timer_A_startCounter(TIMER_A1_BASE,TIMER_A_CONTINUOUS_MODE);
+
+		while(GPIO_getInputPinValue(GPIO_PORT_P1,GPIO_PIN4) == GPIO_INPUT_PIN_HIGH){
+		}
+
+		Timer_A_stop(TIMER_A1_BASE);
+
+		time2 = Timer_A_getCounterValue(TIMER_A1_BASE);
+		time2 = time2 / 58;
+	}
+		
+		
+
        show2bytes(time,time2);
        //gen_audio();
        //if(time < threshold1){
