@@ -16,7 +16,33 @@ volatile uint16_t time2;
 volatile uint16_t threshold1=0;
 volatile uint16_t threshold2=0;
 volatile uint16_t threshold3=0;
+volatile uint16_t threshold4=0;
+volatile uint16_t threshold5=0;
 STATE sensor = SENS1;
+uint16_t Buff[10];
+int p=0;
+int g=0;
+int index=0;
+int size = sizeof(Buff);
+
+Init_data(){
+    int i;
+
+    for(i=0;i<size;i++)
+        Buff[i] = 0;
+}
+
+
+void getdata(uint16_t entry, uint16_t *time){
+    Buff[index] = entry;
+    int i;
+    for(i=0;i<size;i++){
+        *time += Buff[i];
+    }
+    *time /= size;
+    index = (index+1)%size;
+}
+
 
 void show2bytes(uint16_t num, uint16_t num2){
 
@@ -29,19 +55,46 @@ void show2bytes(uint16_t num, uint16_t num2){
     showChar((char)(num2 % 10) + '0', pos6);
 
 }
-void got(){
- GPIO_toggleOutputOnPin(GPIO_PORT_P1, GPIO_PIN4);
-    __delay_cycles(100);
-//show stuff on the LCD
+
+void showstepup(){
+    char *s ="INPUT IN CM\0";
+    displayScrollText(s);
+}
+void showsthreshold(int state, int threshold){
+
+    if( state >= 4 && p==1){
+        displayScrollText("FORNT SENSOR");
+        p++;
+    }
+    if(state <4 && p==0){
+        displayScrollText("REAR SENSOR");
+        p++;
+    }
+
+    showChar((char)((threshold / 100) % 10) + '0', pos1);
+    showChar((char)((threshold / 10) % 10) + '0', pos2);
+    showChar((char)(threshold % 10) + '0', pos3);
+
+    showChar((char)('T'), pos4);
+    showChar((char)('H'), pos5);
+    showChar((char)(state % 10) + '0', pos6);
+}
+
+#pragma vector=PORT2_VECTOR
+__interrupt
+void PORT2_VECTOR_ISR(void){
     int got_thresholds = 0;
     threshold1=0;
     threshold2=0;
     threshold3=0;
+    threshold4=0;
+    threshold5=0;
 
     char buttonState=0;
     char buttonState2=0;
 
     uint16_t state=0;
+    showstepup();
     while(!got_thresholds){
 
         if ((GPIO_getInputPinValue(SW1_PORT, SW1_PIN) == 1) & (buttonState == 0)){
@@ -52,13 +105,24 @@ void got(){
             case(1):
 
                     threshold1 += 10;
+                    showsthreshold(state, threshold1);
                     break;
             case(2):
 
                     threshold2 += 10;
+                    showsthreshold(state, threshold2);
                     break;
             case(3):
                     threshold3 += 10;
+                    showsthreshold(state, threshold3);
+                    break;
+            case(4):
+                    threshold4 += 10;
+                    showsthreshold(state, threshold4);
+                    break;
+            case(5):
+                    threshold5 += 10;
+                    showsthreshold(state, threshold5);
                     break;
             default:
                 break;
@@ -79,43 +143,99 @@ void got(){
         }
 
         /*write code for LCD display in setup mode*/
-        if(state == 4){
+        if(state == 6){
             got_thresholds=1;
         }
     }
-
-    GPIO_toggleOutputOnPin(GPIO_PORT_P1, GPIO_PIN4);
-
-//show stuff on the LCD
-    /*Will add logic for multi-interrupt handling later*/
+    GPIO_clearInterrupt(
+            GPIO_PORT_P2,
+            GPIO_PIN6);
+    g=1;
+    p=0;
 }
 
-void led1on(void){
-//    GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0|GPIO_PIN1|GPIO_PIN2|GPIO_PIN3|GPIO_PIN5|GPIO_PIN6|GPIO_PIN7);
-//    GPIO_setOutputLowOnPin(GPIO_PORT_P5, GPIO_PIN0|GPIO_PIN1|GPIO_PIN2|GPIO_PIN3|GPIO_PIN4|GPIO_PIN5|GPIO_PIN4|GPIO_PIN7);
-//    GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN5);
+void Greenon(void){
+    //1.5
+      GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN1|GPIO_PIN5|GPIO_PIN4);
+      GPIO_setOutputLowOnPin(GPIO_PORT_P5, GPIO_PIN3);
+      GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN5);
+      GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN5);
 
 }
-void led2on(void){
-
-
+void Yellowon(void){
+//1.4
+    GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN1|GPIO_PIN5|GPIO_PIN4);
+    GPIO_setOutputLowOnPin(GPIO_PORT_P5, GPIO_PIN3);
+    GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN5);
+    GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN4);
 }
 
-void led3on(void){
-
-
+void Redon(void){
+//5.3
+    GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN1|GPIO_PIN5|GPIO_PIN4);
+    GPIO_setOutputLowOnPin(GPIO_PORT_P5, GPIO_PIN3);
+    GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN5);
+    GPIO_setOutputHighOnPin(GPIO_PORT_P5, GPIO_PIN3);
 }
-void led4on(void){
-
-
+void Orangeon(void){
+//2.5
+    GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN1|GPIO_PIN5|GPIO_PIN4);
+    GPIO_setOutputLowOnPin(GPIO_PORT_P5, GPIO_PIN3);
+    GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN5);
+    GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN5);
 }
 void gen_audio(){
-//    GPIO_setOutputHighOnPin(GPIO_PORT_P1,GPIO_PIN7);
-//   __delay_cycles(100);
-//   GPIO_setOutputLowOnPin(GPIO_PORT_P1,GPIO_PIN7);
-//    __delay_cycles(100);
+    //5.2
+    int i;
+    while(1){
+        int i=0;
+        if(i==0){
+//    for(i=0;i<100;i++){
+//        GPIO_setOutputHighOnPin(GPIO_PORT_P5,GPIO_PIN2);
+//        __delay_cycles(100);
+//       GPIO_setOutputLowOnPin(GPIO_PORT_P5,GPIO_PIN2);
+//       __delay_cycles(100);
+//    }
+//    __delay_cycles(10000);
+//    for(i=0;i<100;i++){
+//        GPIO_setOutputHighOnPin(GPIO_PORT_P5,GPIO_PIN2);
+//        __delay_cycles(100);
+//       GPIO_setOutputLowOnPin(GPIO_PORT_P5,GPIO_PIN2);
+//       __delay_cycles(100);
+//    }
+    }
+//        __delay_cycles(50000);
+   // if(i==1){
+        for(i=0;i<100;i++){
+            GPIO_setOutputHighOnPin(GPIO_PORT_P5,GPIO_PIN2);
+            __delay_cycles(100);
+           GPIO_setOutputLowOnPin(GPIO_PORT_P5,GPIO_PIN2);
+           __delay_cycles(100);
+        }
+        __delay_cycles(2500);
+        for(i=0;i<100;i++){
+            GPIO_setOutputHighOnPin(GPIO_PORT_P5,GPIO_PIN2);
+            __delay_cycles(100);
+           GPIO_setOutputLowOnPin(GPIO_PORT_P5,GPIO_PIN2);
+           __delay_cycles(100);
+        }        __delay_cycles(2500);
+        for(i=0;i<100;i++){
+            GPIO_setOutputHighOnPin(GPIO_PORT_P5,GPIO_PIN2);
+            __delay_cycles(100);
+           GPIO_setOutputLowOnPin(GPIO_PORT_P5,GPIO_PIN2);
+           __delay_cycles(100);
+        }        __delay_cycles(2500);
+        for(i=0;i<100;i++){
+            GPIO_setOutputHighOnPin(GPIO_PORT_P5,GPIO_PIN2);
+            __delay_cycles(100);
+           GPIO_setOutputLowOnPin(GPIO_PORT_P5,GPIO_PIN2);
+           __delay_cycles(100);
+        }
+        __delay_cycles(2500);
+    //}
+i = (i+1)%2;
 }
-
+}
 void Init_Timer(void){
     timer_param.clockSource = TIMER_A_CLOCKSOURCE_SMCLK;
     timer_param.clockSourceDivider = TIMER_A_CLOCKSOURCE_DIVIDER_1;
@@ -128,13 +248,32 @@ void Init_Timer(void){
 }
 void Init_Sensor_Trigs(void)
 {
+//    GPIO_setAsInputPin(
+//            GPIO_PORT_P1,
+//            GPIO_PIN4);
+
     GPIO_setAsInputPin(
             GPIO_PORT_P1,
-            GPIO_PIN4);
+            GPIO_PIN6);
 
     GPIO_setAsInputPin(
             GPIO_PORT_P1,
             GPIO_PIN3);
+
+    GPIO_enableInterrupt(
+            GPIO_PORT_P2,
+            GPIO_PIN6);
+    GPIO_selectInterruptEdge(
+            GPIO_PORT_P2,
+            GPIO_PIN6,
+            GPIO_LOW_TO_HIGH_TRANSITION);
+
+    GPIO_clearInterrupt(
+            GPIO_PORT_P1,
+            GPIO_PIN_ALL8);
+    GPIO_clearInterrupt(
+            GPIO_PORT_P2,
+            GPIO_PIN_ALL8);
 }
 
 void Init_GPIO(void)
@@ -149,7 +288,7 @@ void Init_GPIO(void)
     GPIO_setOutputLowOnPin(GPIO_PORT_P7, GPIO_PIN0|GPIO_PIN1|GPIO_PIN2|GPIO_PIN3|GPIO_PIN4|GPIO_PIN5|GPIO_PIN6|GPIO_PIN7);
     GPIO_setOutputLowOnPin(GPIO_PORT_P8, GPIO_PIN0|GPIO_PIN1|GPIO_PIN2|GPIO_PIN3|GPIO_PIN4|GPIO_PIN5|GPIO_PIN6|GPIO_PIN7);
 
-    GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN0|GPIO_PIN1|GPIO_PIN5|GPIO_PIN7|GPIO_PIN2);
+    GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN0|GPIO_PIN1|GPIO_PIN4|GPIO_PIN5|GPIO_PIN7|GPIO_PIN2);
     GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN0|GPIO_PIN1|GPIO_PIN2|GPIO_PIN3|GPIO_PIN4|GPIO_PIN5|GPIO_PIN7);
     GPIO_setAsOutputPin(GPIO_PORT_P3, GPIO_PIN0|GPIO_PIN1|GPIO_PIN2|GPIO_PIN3|GPIO_PIN4|GPIO_PIN5|GPIO_PIN6|GPIO_PIN7);
     GPIO_setAsOutputPin(GPIO_PORT_P4, GPIO_PIN0|GPIO_PIN1|GPIO_PIN2|GPIO_PIN3|GPIO_PIN4|GPIO_PIN5|GPIO_PIN6|GPIO_PIN7);
@@ -412,7 +551,11 @@ void TIMER_A0_ISR(void){
         TIMER_A_CAPTURECOMPARE_REGISTER_0
         );
 }
-
+void got(){
+    while(!g){
+    displayScrollText("PRESS BUTTON");
+    }
+}
 void main(void)
 {
     //char buttonState = 0; //Current button press state (to allow edge detection)
@@ -454,13 +597,19 @@ void main(void)
     PMM_unlockLPM5(); //Disable the GPIO power-on default high-impedance mode to activate previously configured port settings
     //All done initializations - turn interrupts back on.
     Init_Timer_Trig();
-
+    Init_data();
     displayScrollText("ECE 298");
-    //got();
     __enable_interrupt();
+
     start_timer();
+    got();
+    //gen_audio();
+    //GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN6);
+    time=0;
+    time2=0;
+    //Redon();
     while(1){
-		
+		uint16_t t;
 	if(sensor == SENS1){
 	    Timer_A_clear(TIMER_A1_BASE);
 		while (GPIO_getInputPinValue(GPIO_PORT_P1,GPIO_PIN3) == 0){};
@@ -472,40 +621,43 @@ void main(void)
 
 		Timer_A_stop(TIMER_A1_BASE);
 
-		time = Timer_A_getCounterValue(TIMER_A1_BASE);
-		time = time / 58;
+		t = Timer_A_getCounterValue(TIMER_A1_BASE);
+		t = t / 58;
+		time = .35*time+ .65*t;
 	}
 	else{
 	    Timer_A_clear(TIMER_A1_BASE);
-		while (GPIO_getInputPinValue(GPIO_PORT_P1,GPIO_PIN4) == 0){};
+		while (GPIO_getInputPinValue(GPIO_PORT_P1,GPIO_PIN6) == 0){};
 
 		Timer_A_startCounter(TIMER_A1_BASE,TIMER_A_CONTINUOUS_MODE);
 
-		while(GPIO_getInputPinValue(GPIO_PORT_P1,GPIO_PIN4) == GPIO_INPUT_PIN_HIGH){
+		while(GPIO_getInputPinValue(GPIO_PORT_P1,GPIO_PIN6) == GPIO_INPUT_PIN_HIGH){
 		}
 
 		Timer_A_stop(TIMER_A1_BASE);
 
-		time2 = Timer_A_getCounterValue(TIMER_A1_BASE);
-		time2 = time2 / 58;
+		t = Timer_A_getCounterValue(TIMER_A1_BASE);
+		t = t / 58;
+		time2 = .35*time2
+		        + .65*t;
 	}
 		
 		
-
+	    //getdata(t,&time);
        show2bytes(time,time2);
-       //gen_audio();
-       //if(time < threshold1){
-            //gen_audio();
-        //}
-        /*if((time<threshold2) &(time>threshold1)){
-            led2on();
+
+       if(time <= threshold1){
+            Redon();
         }
-        if((time<threshold3) &(time>threshold2)){
-            led3on();
+       else if((time<=threshold2) && (time>threshold1)){
+           Orangeon();
         }
-        if(time<threshold3){
-            led4on();
-        }*/
+       else if((time<=threshold3) && (time>threshold2)){
+            Yellowon();
+        }
+        else if(time>threshold3){
+            Greenon();
+        }
 
     /*
      * You can use the following code if you plan on only using interrupts
