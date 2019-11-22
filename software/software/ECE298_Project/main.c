@@ -39,7 +39,8 @@ void getdata(uint16_t entry, uint16_t *time){
     for(i=0;i<size;i++){
         *time += Buff[i];
     }
-    *time /= size;
+
+     *time /= size;
     index = (index+1)%size;
 }
 
@@ -184,57 +185,28 @@ void Orangeon(void){
     GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN5);
     GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN5);
 }
-void gen_audio(){
+void gen_audio2(){
     //5.2
     int i;
-    while(1){
-        int i=0;
-        if(i==0){
-//    for(i=0;i<100;i++){
-//        GPIO_setOutputHighOnPin(GPIO_PORT_P5,GPIO_PIN2);
-//        __delay_cycles(100);
-//       GPIO_setOutputLowOnPin(GPIO_PORT_P5,GPIO_PIN2);
-//       __delay_cycles(100);
-//    }
-//    __delay_cycles(10000);
-//    for(i=0;i<100;i++){
-//        GPIO_setOutputHighOnPin(GPIO_PORT_P5,GPIO_PIN2);
-//        __delay_cycles(100);
-//       GPIO_setOutputLowOnPin(GPIO_PORT_P5,GPIO_PIN2);
-//       __delay_cycles(100);
-//    }
+    int j;
+    for (i=0;i<2;i++){
+        for(j=0;j<100;j++){
+            GPIO_setOutputHighOnPin(GPIO_PORT_P5,GPIO_PIN2);
+            __delay_cycles(1000);
+            GPIO_setOutputLowOnPin(GPIO_PORT_P5, GPIO_PIN2);
+        }
     }
-//        __delay_cycles(50000);
-   // if(i==1){
-        for(i=0;i<100;i++){
-            GPIO_setOutputHighOnPin(GPIO_PORT_P5,GPIO_PIN2);
-            __delay_cycles(100);
-           GPIO_setOutputLowOnPin(GPIO_PORT_P5,GPIO_PIN2);
-           __delay_cycles(100);
-        }
-        __delay_cycles(2500);
-        for(i=0;i<100;i++){
-            GPIO_setOutputHighOnPin(GPIO_PORT_P5,GPIO_PIN2);
-            __delay_cycles(100);
-           GPIO_setOutputLowOnPin(GPIO_PORT_P5,GPIO_PIN2);
-           __delay_cycles(100);
-        }        __delay_cycles(2500);
-        for(i=0;i<100;i++){
-            GPIO_setOutputHighOnPin(GPIO_PORT_P5,GPIO_PIN2);
-            __delay_cycles(100);
-           GPIO_setOutputLowOnPin(GPIO_PORT_P5,GPIO_PIN2);
-           __delay_cycles(100);
-        }        __delay_cycles(2500);
-        for(i=0;i<100;i++){
-            GPIO_setOutputHighOnPin(GPIO_PORT_P5,GPIO_PIN2);
-            __delay_cycles(100);
-           GPIO_setOutputLowOnPin(GPIO_PORT_P5,GPIO_PIN2);
-           __delay_cycles(100);
-        }
-        __delay_cycles(2500);
-    //}
-i = (i+1)%2;
 }
+void gen_audio4(){
+    int i;
+    int j;
+    for (i=0;i<4;i++){
+        for(j=0;j<100;j++){
+            GPIO_setOutputHighOnPin(GPIO_PORT_P5,GPIO_PIN2);
+            __delay_cycles(500);
+            GPIO_setOutputLowOnPin(GPIO_PORT_P5, GPIO_PIN2);
+        }
+    }
 }
 void Init_Timer(void){
     timer_param.clockSource = TIMER_A_CLOCKSOURCE_SMCLK;
@@ -248,9 +220,6 @@ void Init_Timer(void){
 }
 void Init_Sensor_Trigs(void)
 {
-//    GPIO_setAsInputPin(
-//            GPIO_PORT_P1,
-//            GPIO_PIN4);
 
     GPIO_setAsInputPin(
             GPIO_PORT_P1,
@@ -557,6 +526,7 @@ void got(){
     }
 }
 void main(void)
+
 {
     //char buttonState = 0; //Current button press state (to allow edge detection)
 
@@ -597,20 +567,25 @@ void main(void)
     PMM_unlockLPM5(); //Disable the GPIO power-on default high-impedance mode to activate previously configured port settings
     //All done initializations - turn interrupts back on.
     Init_Timer_Trig();
-    Init_data();
+    //Init_data();
     displayScrollText("ECE 298");
     __enable_interrupt();
 
-    start_timer();
+    //start_timer();
     got();
-    //gen_audio();
-    //GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN6);
     time=0;
     time2=0;
-    //Redon();
+    //GPIO_setOutputHighOnPin(GPIO_PORT_P5, GPIO_PIN3);
+    //GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN5);
+    //GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN4);
+    //GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN3);
     while(1){
 		uint16_t t;
 	if(sensor == SENS1){
+	       GPIO_setOutputHighOnPin(GPIO_PORT_P1,GPIO_PIN7);
+	       __delay_cycles(1);
+	       GPIO_setOutputLowOnPin(GPIO_PORT_P1,GPIO_PIN7);
+	//        //__delay_cycles(5);
 	    Timer_A_clear(TIMER_A1_BASE);
 		while (GPIO_getInputPinValue(GPIO_PORT_P1,GPIO_PIN3) == 0){};
 
@@ -621,11 +596,17 @@ void main(void)
 
 		Timer_A_stop(TIMER_A1_BASE);
 
-		t = Timer_A_getCounterValue(TIMER_A1_BASE);
-		t = t / 58;
-		time = .35*time+ .65*t;
+		time = Timer_A_getCounterValue(TIMER_A1_BASE);
+		time = time / 58;
+		time = .75*time+ .25*t;
+        sensor  = SENS2;
+        __delay_cycles(2000);
+		//getdata(t,&time);
 	}
 	else{
+        GPIO_setOutputHighOnPin(GPIO_PORT_P2,GPIO_PIN7);
+        __delay_cycles(1);
+        GPIO_setOutputLowOnPin(GPIO_PORT_P2,GPIO_PIN7);
 	    Timer_A_clear(TIMER_A1_BASE);
 		while (GPIO_getInputPinValue(GPIO_PORT_P1,GPIO_PIN6) == 0){};
 
@@ -636,14 +617,16 @@ void main(void)
 
 		Timer_A_stop(TIMER_A1_BASE);
 
-		t = Timer_A_getCounterValue(TIMER_A1_BASE);
-		t = t / 58;
-		time2 = .35*time2
-		        + .65*t;
+		time2 = Timer_A_getCounterValue(TIMER_A1_BASE);
+		time2 = time2 / 58;
+		//getdata(t,&time2);
+		time2 = .75*time2 + .25*t;
+        sensor  = SENS1;
+        __delay_cycles(2000);
 	}
-		
-		
-	    //getdata(t,&time);
+//
+//
+//	    //getdata(t,&time);
        show2bytes(time,time2);
 
        if(time <= threshold1){
@@ -658,6 +641,17 @@ void main(void)
         else if(time>threshold3){
             Greenon();
         }
+
+       if(time2 < threshold4)
+       {
+           gen_audio2();
+       }
+       else if(time2 >= threshold4 && time2 <= threshold5){
+           gen_audio4();
+       }
+       else{
+           GPIO_setOutputLowOnPin(GPIO_PORT_P5, GPIO_PIN2);
+       }
 
     /*
      * You can use the following code if you plan on only using interrupts
