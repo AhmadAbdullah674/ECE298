@@ -527,6 +527,7 @@ void got(){
 }
 void main(void)
 
+
 {
     //char buttonState = 0; //Current button press state (to allow edge detection)
 
@@ -596,14 +597,14 @@ void main(void)
 
 		Timer_A_stop(TIMER_A1_BASE);
 
-		time = Timer_A_getCounterValue(TIMER_A1_BASE);
-		time = time / 58;
-		time = .75*time+ .25*t;
+		t = Timer_A_getCounterValue(TIMER_A1_BASE);
+		t = t / 58;
+		time = .375*t+ .625*time;
         sensor  = SENS2;
         __delay_cycles(2000);
 		//getdata(t,&time);
 	}
-	else{
+	if(sensor == SENS2){
         GPIO_setOutputHighOnPin(GPIO_PORT_P2,GPIO_PIN7);
         __delay_cycles(1);
         GPIO_setOutputLowOnPin(GPIO_PORT_P2,GPIO_PIN7);
@@ -617,10 +618,10 @@ void main(void)
 
 		Timer_A_stop(TIMER_A1_BASE);
 
-		time2 = Timer_A_getCounterValue(TIMER_A1_BASE);
-		time2 = time2 / 58;
+		t = Timer_A_getCounterValue(TIMER_A1_BASE);
+		t = t / 58;
 		//getdata(t,&time2);
-		time2 = .75*time2 + .25*t;
+		time2 = .375*t + .625*time2;
         sensor  = SENS1;
         __delay_cycles(2000);
 	}
@@ -629,7 +630,7 @@ void main(void)
 //	    //getdata(t,&time);
        show2bytes(time,time2);
 
-       if(time <= threshold1){
+       if(time <= threshold1){ //rear
             Redon();
         }
        else if((time<=threshold2) && (time>threshold1)){
@@ -644,10 +645,10 @@ void main(void)
 
        if(time2 < threshold4)
        {
-           gen_audio2();
+           gen_audio4();
        }
        else if(time2 >= threshold4 && time2 <= threshold5){
-           gen_audio4();
+           gen_audio2();
        }
        else{
            GPIO_setOutputLowOnPin(GPIO_PORT_P5, GPIO_PIN2);
